@@ -118,11 +118,14 @@ public class iVoteDriver {
 		}
 		
 		// make sure response is valid
-		question.checkResponse(response);
-		
-		// student submits the response
-		student.setResponse(response);
-		
+		if (question.checkResponse(response)) {
+			// student submits the response
+			student.setResponse(response);
+		} else {
+			// response is invalid, try again
+			simulateResponse(student, question, type);
+		}
+
 	}
 
 }
