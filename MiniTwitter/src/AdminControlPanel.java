@@ -13,6 +13,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 
+/*
+ * 	Admin Control Panel to create users and groups,
+ * 	spawn the UserView of selected user, and 
+ * 	get statistics on total users, groups, tweets, and positive percentage.
+ * 	Uses the Singleton Pattern, only one instance is allowed.
+ */
 @SuppressWarnings("serial")
 public class AdminControlPanel extends JFrame {
 
@@ -76,7 +82,9 @@ public class AdminControlPanel extends JFrame {
 				DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
 				
 				if(txtUserId.getText().trim().equals("")) {
-					JOptionPane.showMessageDialog(jframe, "Invalid User ID");
+					JOptionPane.showMessageDialog(jframe, "Invalid User ID, enter a User ID.");
+				} else if (root.getUser(txtUserId.getText().trim()) != null) {
+					JOptionPane.showMessageDialog(jframe, "Invalid User ID, the user already exists!");					
 				} else if (selectedNode != null && selectedNode.getUserObject().toString().startsWith("$") ) {
 					User user = new User(txtUserId.getText());
 					if(selectedNode.getUserObject().toString().equals("$ROOT")) {
@@ -91,7 +99,7 @@ public class AdminControlPanel extends JFrame {
 					model.reload();
 					txtUserId.setText("");
 				} else {
-					JOptionPane.showMessageDialog(jframe, "Invalid group selection, select '$ROOT' by default.");
+					JOptionPane.showMessageDialog(jframe, "Invalid group selection, select a group to add the user under.");
 				}
 			}
 		});
@@ -111,7 +119,9 @@ public class AdminControlPanel extends JFrame {
 				DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
 				
 				if(txtGroupId.getText().trim().equals("")) {
-					JOptionPane.showMessageDialog(jframe, "Invalid Group ID");
+					JOptionPane.showMessageDialog(jframe, "Invalid Group ID, enter a Group ID.");
+				} else if (root.getGroup("$" + txtGroupId.getText().trim().toUpperCase()) != null) {
+					JOptionPane.showMessageDialog(jframe, "Invalid Group ID, the group already exists!");					
 				} else if (selectedNode != null && selectedNode.getUserObject().toString().startsWith("$")) {
 					String groupname = "$" + txtGroupId.getText().toUpperCase();
 					Group group = new Group(groupname);
@@ -185,7 +195,7 @@ public class AdminControlPanel extends JFrame {
 					UserView userview = new UserView(root.getUser(selectedNode.getUserObject().toString()), root);
 					userview.setVisible(true);
 				} else {
-					JOptionPane.showMessageDialog(jframe, "Invalid selection, select a user.");
+					JOptionPane.showMessageDialog(jframe, "Invalid selection, select a user to open User View for.");
 				}
 			}
 		});

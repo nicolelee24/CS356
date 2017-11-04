@@ -11,7 +11,9 @@ import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 
 /*
- * Talk about the ISubject here
+ * UserView GUI implements ISubject,
+ * user of the view is the subject (observable) to its followers.
+ * The user can follow other users, post tweets, and view their newsfeed.
  */
 @SuppressWarnings("serial")
 public class UserView extends JFrame implements ISubject{
@@ -25,6 +27,8 @@ public class UserView extends JFrame implements ISubject{
 	private 	JTextArea txtrNewsfeed = new JTextArea();
 	private	JScrollPane cfscrollPane = new JScrollPane(txtrCurrentFollowing);
 	private JScrollPane nfscrollPane = new JScrollPane(txtrNewsfeed);
+	private JTextArea txtrTweetMessage = new JTextArea();
+	private final JScrollPane tmscrollpane = new JScrollPane(txtrTweetMessage);
 	
 	public UserView(User userr, Group group) {
 		root = group;
@@ -61,11 +65,13 @@ public class UserView extends JFrame implements ISubject{
 		btnFollowUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (txtUserId.getText().trim().equals("")) {
-					JOptionPane.showMessageDialog(jframe, "Invalid User ID, enter a user ID");
+					JOptionPane.showMessageDialog(jframe, "Invalid User ID, enter a User ID.");
 				} else if (txtUserId.getText().trim().equals(user.getID())) {
-					JOptionPane.showMessageDialog(jframe, "Invalid User ID, cannot follow yourself");
+					JOptionPane.showMessageDialog(jframe, "Invalid User ID, cannot follow yourself.");
 				} else if (root.getUser(user.getID()).getFollowings().contains(root.getUser(txtUserId.getText().trim()))) {
-					JOptionPane.showMessageDialog(jframe, "Invalid User ID, you already follow that user");
+					JOptionPane.showMessageDialog(jframe, "Invalid User ID, you already follow that user.");
+				} else if (root.getUser(txtUserId.getText().trim()) == null) {
+					JOptionPane.showMessageDialog(jframe, "Invalid User ID, user doesn't exist!");					
 				} else {
 					follow(root.getUser(txtUserId.getText().trim()));
 					txtUserId.setText("");
@@ -75,9 +81,11 @@ public class UserView extends JFrame implements ISubject{
 		btnFollowUser.setBounds(377, 6, 117, 29);
 		contentPane.add(btnFollowUser);
 		
+		txtrNewsfeed.setEditable(false);
+		txtrNewsfeed.setLineWrap(true);
+		
 		ActionListener updateNF = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				txtrNewsfeed.setEditable(false);
 				txtrNewsfeed.setText("Newsfeed:\n");
 				for (String tweet: root.getUser(user.getID()).getNewsfeed()) {
 					txtrNewsfeed.append("\n" + tweet);
@@ -89,16 +97,18 @@ public class UserView extends JFrame implements ISubject{
 		timer.setRepeats(true);
 		timer.start();
 		
-		JTextArea txtrTweetMessage = new JTextArea();
-		txtrTweetMessage.setText("Tweet Message");
-		txtrTweetMessage.setBounds(6, 175, 359, 26);
-		contentPane.add(txtrTweetMessage);
+		tmscrollpane.setBounds(6, 175, 359, 26);		
+		contentPane.add(tmscrollpane);
 		
+		txtrTweetMessage.setLineWrap(true);
+		txtrTweetMessage.setText("Tweet Message");
+		tmscrollpane.setViewportView(txtrTweetMessage);
+
 		JButton btnTweet = new JButton("Post Tweet");
 		btnTweet.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (txtrTweetMessage.getText().trim().equals("")) {
-					JOptionPane.showMessageDialog(jframe, "Invalid message, enter text");
+					JOptionPane.showMessageDialog(jframe, "Invalid message, enter text.");
 				} else {
 					String tweet = user.getID() + ": " + txtrTweetMessage.getText().toString();
 					root.getUser(user.getID()).updateNewsfeed(tweet);
