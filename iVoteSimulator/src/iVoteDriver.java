@@ -72,9 +72,11 @@ public class iVoteDriver {
 			for (int j = 0; j < rounds; j++) {
 				// make the student submit an answer
 				simulateResponse(student, question, type);
+				
+				// send the student's response to the iVoteService
+				iVote.acceptResponse(student);
 			}
-			// send the student's response to the iVoteService
-			iVote.acceptResponse(student);
+			
 		}
 		
 		// submission is over, calculate the statistics
