@@ -2,5 +2,5 @@
 public interface IComponent {
 
 	public String getID();
-	
+	public long	getCreationTime();
 }

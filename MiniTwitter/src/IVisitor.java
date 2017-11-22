@@ -5,5 +5,7 @@ public interface IVisitor {
 	public int visitGroups(Group g);
 	public int visitTweets(Group g);
 	public String visitPositivePercentage(Group g);
+	public String visitIdVerification(Group g);
+	public String visitLastUpdatedUser(Group g);
 	
 }

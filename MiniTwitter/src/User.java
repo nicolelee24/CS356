@@ -12,17 +12,22 @@ public class User implements IComponent, IObserver {
 	private List<User> followers;
 	private List<User> followings;
 	private List<String> newsfeed;
+	private long creationTime;
+	private long lastUpdatedTime;
 	
 	public User(String userID) {
 		this.userID = userID;
 		followers = new ArrayList<User>();
 		followings = new ArrayList<User>();
 		newsfeed = new ArrayList<String>();
+		this.creationTime = System.currentTimeMillis();
+		this.lastUpdatedTime = System.currentTimeMillis();
 	}
 
 	@Override
 	public void updateNewsfeed(String tweet) {
 		newsfeed.add(tweet);
+		lastUpdatedTime = System.currentTimeMillis();
 	}
 
 	@Override
@@ -52,6 +57,15 @@ public class User implements IComponent, IObserver {
 	
 	public User getUser() {
 		return User.this;
+	}
+
+	@Override
+	public long getCreationTime() {
+		return creationTime;
+	}
+
+	public long getLastUpdatedTime() {
+		return lastUpdatedTime;
 	}
 
 }

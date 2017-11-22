@@ -63,7 +63,7 @@ public class AdminControlPanel extends JFrame {
 		contentPane.setLayout(null);
 		
 		JTree tree = new JTree();
-		tree.setBounds(6, 9, 210, 366);
+		tree.setBounds(6, 9, 210, 320);
 		tree.setBorder(UIManager.getBorder("Tree.editorBorder"));
 		tree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode("$ROOT")));
 		contentPane.add(tree);
@@ -187,7 +187,7 @@ public class AdminControlPanel extends JFrame {
 		contentPane.add(btnShowTotalGroups);
 		
 		JButton btnOpenUserView = new JButton("Open User View");
-		btnOpenUserView.setBounds(228, 86, 200, 29);
+		btnOpenUserView.setBounds(6, 341, 210, 29);
 		btnOpenUserView.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
@@ -200,6 +200,24 @@ public class AdminControlPanel extends JFrame {
 			}
 		});
 		contentPane.add(btnOpenUserView);
+		
+		JButton btnVerifyId = new JButton("Verify ID");
+		btnVerifyId.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				displayTextArea.append("ID Verification: " + visitor.visitIdVerification(root) + "\n");
+			}
+		});
+		btnVerifyId.setBounds(228, 82, 153, 29);
+		contentPane.add(btnVerifyId);
+		
+		JButton btnLastUpdated = new JButton("Last Updated User");
+		btnLastUpdated.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				displayTextArea.append("Last Updated User is: " + visitor.visitLastUpdatedUser(root) + "\n");
+			}
+		});
+		btnLastUpdated.setBounds(391, 82, 153, 29);
+		contentPane.add(btnLastUpdated);
 		
 	}
 }

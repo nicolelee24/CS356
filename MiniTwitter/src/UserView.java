@@ -7,6 +7,7 @@ import javax.swing.Timer;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
 import java.awt.event.ActionListener;
+import java.util.Date;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 
@@ -29,8 +30,12 @@ public class UserView extends JFrame implements ISubject{
 	private JScrollPane nfscrollPane = new JScrollPane(txtrNewsfeed);
 	private JTextArea txtrTweetMessage = new JTextArea();
 	private final JScrollPane tmscrollpane = new JScrollPane(txtrTweetMessage);
+	private JTextField txtCreationTime;
+	private final JTextField txtNewsfeedLastUpdated = new JTextField();
 	
+	@SuppressWarnings("deprecation")
 	public UserView(User userr, Group group) {
+		
 		root = group;
 		user = root.getUser(userr.getID());
 		
@@ -42,7 +47,7 @@ public class UserView extends JFrame implements ISubject{
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		cfscrollPane.setBounds(6, 40, 488, 127);
+		cfscrollPane.setBounds(218, 40, 276, 85);
 		contentPane.add(cfscrollPane);
 		
 		nfscrollPane.setBounds(6, 213, 488, 159);
@@ -50,7 +55,7 @@ public class UserView extends JFrame implements ISubject{
 		
 		txtUserId = new JTextField();
 		txtUserId.setText("User ID");
-		txtUserId.setBounds(6, 6, 359, 26);
+		txtUserId.setBounds(6, 37, 200, 26);
 		contentPane.add(txtUserId);
 		txtUserId.setColumns(10);
 		
@@ -78,7 +83,7 @@ public class UserView extends JFrame implements ISubject{
 				}
 			}
 		});
-		btnFollowUser.setBounds(377, 6, 117, 29);
+		btnFollowUser.setBounds(6, 75, 200, 29);
 		contentPane.add(btnFollowUser);
 		
 		txtrNewsfeed.setEditable(false);
@@ -97,7 +102,7 @@ public class UserView extends JFrame implements ISubject{
 		timer.setRepeats(true);
 		timer.start();
 		
-		tmscrollpane.setBounds(6, 175, 359, 26);		
+		tmscrollpane.setBounds(6, 137, 359, 29);		
 		contentPane.add(tmscrollpane);
 		
 		txtrTweetMessage.setLineWrap(true);
@@ -118,8 +123,33 @@ public class UserView extends JFrame implements ISubject{
 				}
 			}
 		});
-		btnTweet.setBounds(377, 175, 117, 29);
+		btnTweet.setBounds(377, 137, 117, 29);
 		contentPane.add(btnTweet);
+		
+		Date date = new Date(user.getCreationTime());
+		txtCreationTime = new JTextField();
+		txtCreationTime.setEditable(false);
+		txtCreationTime.setText("User Creation Time: " + date.toLocaleString());
+		txtCreationTime.setBounds(6, 6, 488, 26);
+		contentPane.add(txtCreationTime);
+		txtCreationTime.setColumns(10);
+		
+		txtNewsfeedLastUpdated.setEditable(false);
+		txtNewsfeedLastUpdated.setBounds(6, 175, 488, 26);
+		txtNewsfeedLastUpdated.setColumns(10);
+		
+		ActionListener updateNFLU = new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Date date1 = new Date(user.getLastUpdatedTime());
+				txtNewsfeedLastUpdated.setText("Newsfeed Last Updated On: " + date1.toLocaleString());
+			}
+		};
+		Timer timer1 = new Timer(500, updateNFLU);
+		timer1.setRepeats(true);
+		timer1.start();
+		
+		
+		contentPane.add(txtNewsfeedLastUpdated);
 		
 	}
 

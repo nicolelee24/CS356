@@ -9,14 +9,17 @@ public class Group implements IComponent {
 
 	private String groupID;
 	private List<IComponent> components = new ArrayList<IComponent>();
+	private long creationTime;
 	
 	public Group(String groupID) {
 		this.groupID = groupID;
+		this.creationTime = System.currentTimeMillis();
 	}
 	
 	public Group(String groupID, Group group) {
 		this.groupID = groupID;
 		components.add(group);
+		this.creationTime = System.currentTimeMillis();
 	}
 	
 	public void addGroup(Group groupID) {
@@ -58,6 +61,11 @@ public class Group implements IComponent {
 	@Override
 	public String getID() {
 		return groupID;
+	}
+
+	@Override
+	public long getCreationTime() {
+		return creationTime;
 	}
 
 }
